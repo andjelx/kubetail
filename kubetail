@@ -176,6 +176,9 @@ if [ "${regex}" == 'regex' ]; then
 	grep_matcher='-E'
 fi
 
+# Strip po/ from supplied pod name 
+pod=$(echo ${pod} | sed 's/po\///g')
+
 # Get all pods matching the input and put them in an array. If no input then all pods are matched.
 matching_pods=(`${KUBECTL_BIN} get pods ${context:+--context=${context}} "${selector[@]}" --namespace=${namespace} --output=jsonpath='{.items[*].metadata.name}' | xargs -n1 | grep $grep_matcher "${pod}"`)
 matching_pods_size=${#matching_pods[@]}
